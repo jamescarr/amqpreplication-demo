@@ -1,0 +1,44 @@
+<ehcache>
+<!-- 
+	This is configured to use dev.rabbitmq.com. You will definitely see better results
+	if you point it to a broker deployed within your own infrastructure!
+ -->
+    <diskStore path="java.io.tmpdir"/>
+     <cacheManagerPeerProviderFactory
+            class="net.sf.ehcache.amqp.AMQCacheManagerPeerProviderFactory"
+            properties="host=dev.rabbitmq.com"
+            propertySeparator=","
+            />
+    
+     <defaultCache
+            maxElementsInMemory="1000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            />
+    <cache name="primefactors"
+       maxElementsInMemory="100"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+               <cacheEventListenerFactory class="net.sf.ehcache.amqp.AMQCacheReplicatorFactory"
+                                   properties="replicatePuts=true,
+                                                replicateUpdates=true,
+                                                replicateUpdatesViaCopy=true,
+                                                replicateRemovals=true,
+                                                host=dev.rabbitmq.com"
+                                   propertySeparator=","/>
+            
+            </cache>
+    
+</ehcache>
